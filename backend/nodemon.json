@@ -1,0 +1,6 @@
+{
+  "watch": ["server.js", "controllers", "routes", "models", "services", "utils"],
+  "ignore": [".openwa_session", ".openwa_session/**"],
+  "ext": "js,json",
+  "exec": "node server.js"
+}

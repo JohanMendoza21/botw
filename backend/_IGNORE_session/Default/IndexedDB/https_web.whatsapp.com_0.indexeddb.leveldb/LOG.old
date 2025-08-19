@@ -1,0 +1,4 @@
+2025/08/08-13:01:47.499 a303 Reusing MANIFEST /Users/johanmendoza/botw/backend/_IGNORE_session/Default/IndexedDB/https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2025/08/08-13:01:47.500 a303 Recovering log #229
+2025/08/08-13:01:47.500 a303 Reusing old log /Users/johanmendoza/botw/backend/_IGNORE_session/Default/IndexedDB/https_web.whatsapp.com_0.indexeddb.leveldb/000229.log 
+2025/08/08-13:01:48.521 b603 Manual compaction at level-0 from '\x00$\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00%\x00\x00\x00' @ 0 : 0; will stop at (end)

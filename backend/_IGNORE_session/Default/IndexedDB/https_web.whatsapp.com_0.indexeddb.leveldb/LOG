@@ -1,0 +1,25 @@
+2025/08/08-13:02:01.594 8503 Reusing MANIFEST /Users/johanmendoza/botw/backend/_IGNORE_session/Default/IndexedDB/https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2025/08/08-13:02:01.594 8503 Recovering log #229
+2025/08/08-13:02:01.600 8503 Reusing old log /Users/johanmendoza/botw/backend/_IGNORE_session/Default/IndexedDB/https_web.whatsapp.com_0.indexeddb.leveldb/000229.log 
+2025/08/08-13:02:02.616 a003 Level-0 table #240: started
+2025/08/08-13:02:02.623 a003 Level-0 table #240: 532791 bytes OK
+2025/08/08-13:02:02.625 a003 Delete type=0 #229
+2025/08/08-13:02:02.625 8503 Manual compaction at level-0 from '\x00%\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00&\x00\x00\x00' @ 0 : 0; will stop at (end)
+2025/08/08-13:02:03.142 a103 Compacting 1@1 + 7@2 files
+2025/08/08-13:02:03.167 a103 Generated table #241@1: 52692 keys, 2212665 bytes
+2025/08/08-13:02:03.186 a103 Generated table #242@1: 27702 keys, 2186597 bytes
+2025/08/08-13:02:03.195 a103 Generated table #243@1: 1770 keys, 2151655 bytes
+2025/08/08-13:02:03.204 a103 Generated table #244@1: 1831 keys, 2152780 bytes
+2025/08/08-13:02:03.217 a103 Generated table #245@1: 9021 keys, 2167158 bytes
+2025/08/08-13:02:03.239 a103 Generated table #246@1: 29968 keys, 2251660 bytes
+2025/08/08-13:02:03.251 a103 Generated table #247@1: 37535 keys, 1094380 bytes
+2025/08/08-13:02:03.251 a103 Compacted 1@1 + 7@2 files => 14216895 bytes
+2025/08/08-13:02:03.253 a103 compacted to: files[ 0 0 7 0 0 0 0 ]
+2025/08/08-13:02:03.253 a103 Delete type=2 #236
+2025/08/08-13:02:03.253 a103 Delete type=2 #237
+2025/08/08-13:02:03.253 a103 Delete type=2 #235
+2025/08/08-13:02:03.253 a103 Delete type=2 #234
+2025/08/08-13:02:03.253 a103 Delete type=2 #231
+2025/08/08-13:02:03.253 a103 Delete type=2 #233
+2025/08/08-13:02:03.253 a103 Delete type=2 #232
+2025/08/08-13:02:03.253 a103 Delete type=2 #240
