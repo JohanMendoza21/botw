@@ -1,0 +1,212 @@
+/* Dashboard.css - Versión Evolucionada 🚀 */
+
+:root {
+  /* Paleta sofisticada: Deep Space */
+  --bg: #030712;
+  --surface: #111827;
+  --surface-hover: #1f2937;
+  --muted: #94a3b8;
+  --line: rgba(255, 255, 255, 0.08);
+  --text: #f9fafb;
+  
+  /* Acentos con Neón suave */
+  --accent: #22d3ee;
+  --accent-glow: rgba(34, 211, 238, 0.3);
+  --green: #10b981;
+  --red: #f43f5e;
+  --orange: #f59e0b;
+  
+  /* Medidas y Bordes */
+  --radius: 16px;
+  --radius-sm: 8px;
+  --gap: 12px;
+  --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+  
+  /* Scrollbars */
+  --scrollbar-track: #0f172a;
+  --scrollbar-thumb: #334155;
+}
+
+/* Reset Pro */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* --------------------------
+   Dashboard Container
+   -------------------------- */
+.dashboard {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+h1 { 
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+}
+
+/* --------------------------
+   Toolbar & Inputs (Glassmorphism Lite)
+   -------------------------- */
+.toolbar { display: flex; flex-wrap: wrap; gap: 12px; }
+
+.input, .btn {
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--text);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-glow);
+  outline: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #000;
+  font-weight: 600;
+  border: none;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px var(--accent-glow);
+}
+
+/* --------------------------
+   BOARD: Los Slots (Grid mejorado)
+   -------------------------- */
+.board {
+  display: grid;
+  grid-template-rows: repeat(2, 80px); /* Filas con altura fija para orden */
+  grid-auto-flow: column;
+  grid-auto-columns: 200px;
+  gap: 12px;
+  overflow-x: auto;
+  padding: 10px 2px;
+  scroll-behavior: smooth;
+}
+
+.slot {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.slot:hover {
+  background: var(--surface-hover);
+  border-color: var(--accent);
+  transform: scale(1.02);
+}
+
+.slot .pill {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  box-shadow: 0 0 10px currentColor; /* Efecto neón */
+}
+
+.free .pill { color: var(--green); background: var(--green); }
+.busy .pill { color: var(--red); background: var(--red); }
+.hold .pill { color: var(--orange); background: var(--orange); }
+
+/* --------------------------
+   SUGGEST BOX (El Hero del Dashboard)
+   -------------------------- */
+.suggest-box {
+  background: linear-gradient(135deg, #111827 0%, #030712 100%);
+  border: 1px solid var(--line);
+  padding: 30px;
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Efecto de luz decorativa */
+.suggest-box::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -10%;
+  width: 300px;
+  height: 300px;
+  background: var(--accent-glow);
+  filter: blur(80px);
+  z-index: 0;
+}
+
+.suggest-main {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 900;
+  position: relative;
+  z-index: 1;
+}
+
+/* --------------------------
+   CARDS (Listado inferior)
+   -------------------------- */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: 0.3s ease;
+}
+
+.card:hover {
+  border-color: rgba(255,255,255,0.2);
+  box-shadow: var(--shadow-lg);
+}
+
+.preview-wrapper {
+  aspect-ratio: 16/9;
+  background: #000;
+  position: relative;
+}
+
+.card-content { padding: 16px; display: flex; flex-direction: column; gap: 8px; }
+
+/* Scrollbar Custom */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--scrollbar-track); }
+::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .dashboard { padding: 16px; }
+  .suggest-box { flex-direction: column; text-align: center; gap: 20px; }
+  .board { grid-auto-columns: 160px; }
+}
