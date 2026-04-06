@@ -34,4 +34,15 @@ Anti-Spam Pacing: Implemented a customizable throttling engine to ensure deliver
 
 🏁 Quick Start
 Clone the Engine
-  
+  https://github.com/JohanMendoza21/botw.git
+
+Ignite Backend
+  cd backend && npm install && npm start
+
+Launch Dashboard
+  cd frontend && npm install && npm start
+
+👤 Author
+Johan Mendoza - Software Developer
+
+"I don't just build apps; I build operational advantages."
