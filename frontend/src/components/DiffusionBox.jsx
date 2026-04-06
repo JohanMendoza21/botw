@@ -14,39 +14,31 @@ import { toast } from 'react-toastify';
 function DiffusionBox({ container, setContainers }) {
   const { id, title, cards, send } = container;
 
-  // UI state
   const [expanded, setExpanded] = useState(true);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [editingCardId, setEditingCardId] = useState(null);
   const [savingEdit, setSavingEdit] = useState(false);
-
-  // Title editing state
   const [editingTitle, setEditingTitle] = useState(false);
   const [tempTitle, setTempTitle] = useState(title || '');
   const [savingTitle, setSavingTitle] = useState(false);
 
   const toggleExpand = () => setExpanded(v => !v);
 
-  // Persist send toggle (caja) y sincronizar con respuesta del backend
   const toggleSend = async () => {
     try {
       const updated = await updateDiffusion(id, { send: !send });
       setContainers(prev =>
         prev.map(c => (c.id === id ? { ...c, send: updated.send } : c))
       );
-      toast.success(updated.send ? '✅ Difusión activada' : '⏸️ Difusión desactivada');
+      toast.success(updated.send ? '🚀 Transmisión Activada' : '⏸️ Transmisión en Pausa');
     } catch {
-      toast.error('❌ No se pudo actualizar el estado');
+      toast.error('❌ Error de conexión');
     }
   };
 
-  // Guardar título
   const handleSaveTitle = async () => {
     const newTitle = (tempTitle || '').trim();
-    if (!newTitle) {
-      toast.warn('⚠️ El título no puede estar vacío');
-      return;
-    }
+    if (!newTitle) return toast.warn('⚠️ Título requerido');
     try {
       setSavingTitle(true);
       const updated = await updateDiffusion(id, { title: newTitle });
@@ -54,9 +46,7 @@ function DiffusionBox({ container, setContainers }) {
       setEditingTitle(false);
       toast.success('✅ Título actualizado');
     } catch (err) {
-      const msg = err?.response?.data?.error || 'Error al actualizar el título';
-      const details = err?.response?.data?.details;
-      toast.error(`❌ ${msg}${details ? `: ${details}` : ''}`);
+      toast.error(`❌ Error al actualizar`);
     } finally {
       setSavingTitle(false);
     }
@@ -67,7 +57,6 @@ function DiffusionBox({ container, setContainers }) {
     setEditingTitle(false);
   };
 
-  // Crear tarjeta
   const handleSaveCreate = async (cardData) => {
     try {
       const newCard = await addCardToDiffusion(id, cardData);
@@ -75,15 +64,12 @@ function DiffusionBox({ container, setContainers }) {
         prev.map(c => (c.id === id ? { ...c, cards: [...c.cards, newCard] } : c))
       );
       setShowCreateForm(false);
-      toast.success('✅ Tarjeta creada');
+      toast.success('✨ Tarjeta añadida');
     } catch (err) {
-      const msg = err?.response?.data?.error || 'Error al crear la tarjeta';
-      const details = err?.response?.data?.details;
-      toast.error(`❌ ${msg}${details ? `: ${details}` : ''}`);
+      toast.error(`❌ Error al crear`);
     }
   };
 
-  // Eliminar tarjeta
   const handleDeleteCard = async (cardId) => {
     if (!window.confirm('¿Eliminar esta tarjeta?')) return;
     try {
@@ -95,18 +81,18 @@ function DiffusionBox({ container, setContainers }) {
             : c
         )
       );
-      toast.success('🗑️ Tarjeta eliminada');
+      toast.success('🗑️ Eliminada');
     } catch {
-      toast.error('❌ No se pudo eliminar la tarjeta');
+      toast.error('❌ Error al eliminar');
     }
   };
 
-  // Edición inline de tarjeta
   const startEdit = (card) => setEditingCardId(card._id || card.id);
   const cancelEdit = () => {
     setEditingCardId(null);
     setSavingEdit(false);
   };
+
   const saveEdit = async (cardId, data) => {
     try {
       setSavingEdit(true);
@@ -121,18 +107,15 @@ function DiffusionBox({ container, setContainers }) {
             : box
         )
       );
-      toast.success('✅ Tarjeta actualizada');
+      toast.success('✅ Cambios guardados');
       setEditingCardId(null);
     } catch (err) {
-      const msg = err?.response?.data?.error || 'Error al actualizar tarjeta';
-      const details = err?.response?.data?.details;
-      toast.error(`❌ ${msg}${details ? `: ${details}` : ''}`);
+      toast.error(`❌ Error al guardar`);
     } finally {
       setSavingEdit(false);
     }
   };
 
-  // Toggle send de una Card (actualiza solo estado local; la BDD se actualiza desde Card.jsx)
   const handleToggleCardSend = (cardId, nextSend) => {
     setContainers(prev =>
       prev.map(box =>
@@ -148,19 +131,17 @@ function DiffusionBox({ container, setContainers }) {
     );
   };
 
-  // Eliminar caja
   const handleDeleteBox = async () => {
-    if (!window.confirm(`¿Eliminar la difusión "${title}" y sus tarjetas?`)) return;
+    if (!window.confirm(`¿Borrar "${title}" por completo?`)) return;
     try {
       await deleteDiffusion(id);
       setContainers(prev => prev.filter(c => c.id !== id));
-      toast.success('🗑️ Difusión eliminada');
+      toast.success('🗑️ Caja eliminada');
     } catch {
-      toast.error('❌ No se pudo eliminar la difusión');
+      toast.error('❌ Error al eliminar');
     }
   };
 
-  // --- Ordenar tarjetas A→Z por nombre (sin mutar el array original)
   const sortedCards = (cards || [])
     .slice()
     .sort((a, b) =>
@@ -168,127 +149,118 @@ function DiffusionBox({ container, setContainers }) {
     );
 
   return (
-    <div className="w-full bg-white rounded-xl shadow p-4 flex flex-col gap-4 border border-gray-200">
-      {/* Header */}
-      <div className="flex items-start justify-between">
-        <div className="flex-1">
-          {/* Título editable con icono en hover */}
+    <div className="w-full bg-white/5 border border-white/10 rounded-[2.5rem] p-6 flex flex-col gap-6 backdrop-blur-md transition-all hover:border-cyan-500/20 shadow-xl">
+      
+      {/* --- HEADER DE LA CAJA --- */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="space-y-1">
           {editingTitle ? (
             <div className="flex items-center gap-2">
               <input
                 value={tempTitle}
                 onChange={(e) => setTempTitle(e.target.value)}
-                className="text-lg font-semibold text-gray-800 border rounded px-2 py-1 w-full max-w-md"
-                placeholder="Título de la difusión"
+                className="bg-[#0f172a] text-xl font-black text-cyan-400 border border-cyan-500/30 rounded-xl px-3 py-1 outline-none"
                 autoFocus
               />
-              <button
-                onClick={handleSaveTitle}
-                disabled={savingTitle}
-                className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 disabled:opacity-50"
-                title="Guardar título"
-              >
-                ✓
-              </button>
-              <button
-                onClick={handleCancelTitle}
-                className="inline-flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg bg-gray-200 text-gray-700 hover:bg-gray-300"
-                title="Cancelar"
-              >
-                ✕
-              </button>
+              <button onClick={handleSaveTitle} disabled={savingTitle} className="p-2 bg-cyan-500 text-black rounded-lg text-xs">✓</button>
+              <button onClick={handleCancelTitle} className="p-2 bg-white/5 text-gray-400 rounded-lg text-xs">✕</button>
             </div>
           ) : (
-            <div className="flex items-center gap-2 group">
-              <h2 className="text-lg font-bold text-gray-800">{title}</h2>
+            <div className="flex items-center gap-3 group">
+              <h2 className="text-xl font-black text-white uppercase tracking-tighter italic">
+                {title}
+              </h2>
               <button
                 onClick={() => setEditingTitle(true)}
-                className="opacity-0 group-hover:opacity-100 transition-opacity p-1 text-gray-500 hover:text-gray-700"
-                title="Editar título"
+                className="opacity-0 group-hover:opacity-100 transition-opacity text-gray-500 hover:text-cyan-400 text-sm"
               >
-                ✎
+                ✏️
               </button>
             </div>
           )}
-
-          <p className="text-sm text-gray-500 mt-1">
-            {cards.length} {cards.length === 1 ? 'plantilla' : 'plantillas'}
-          </p>
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">
+              {cards.length} {cards.length === 1 ? 'Plantilla' : 'Plantillas'} Registradas
+            </span>
+            <div className={`w-1.5 h-1.5 rounded-full ${send ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]' : 'bg-gray-600'}`} />
+          </div>
         </div>
 
-        <span className={`text-xs px-2 py-1 rounded-full ${send ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-600'}`}>
-          {send ? 'Activa' : 'Inactiva'}
-        </span>
-      </div>
-
-      {/* Acciones */}
-      <div className="flex flex-wrap gap-2">
-        <button
-          onClick={toggleSend}
-          className={`inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition shadow-sm
-            ${send
-              ? 'bg-amber-100 text-amber-800 hover:bg-amber-200 border border-amber-200'
-              : 'bg-indigo-600 text-white hover:bg-indigo-700'
+        {/* Acciones principales de la caja */}
+        <div className="flex items-center gap-2 self-end md:self-auto">
+          <button
+            onClick={toggleSend}
+            className={`px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${
+              send
+                ? 'bg-amber-500/10 text-amber-500 border border-amber-500/20 hover:bg-amber-500/20'
+                : 'bg-cyan-500 text-black shadow-lg shadow-cyan-500/20 hover:bg-cyan-400'
             }`}
-        >
-          {send ? '⏸️ Desactivar' : '▶️ Activar'}
-        </button>
-
-        <button
-          onClick={handleDeleteBox}
-          className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition bg-rose-50 text-rose-700 hover:bg-rose-100 border border-rose-200"
-        >
-          🗑️ Eliminar
-        </button>
-
-        <button
-          onClick={toggleExpand}
-          className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition bg-gray-100 text-gray-800 hover:bg-gray-200 border border-gray-200"
-        >
-          {expanded ? '▲ Ocultar' : '▼ Ver más'}
-        </button>
+          >
+            {send ? '⏸️ Pausar' : '▶️ Activar'}
+          </button>
+          <button
+            onClick={handleDeleteBox}
+            className="p-2.5 bg-white/5 hover:bg-rose-500/20 text-gray-500 hover:text-rose-500 rounded-xl border border-white/5 transition-all"
+          >
+            🗑️
+          </button>
+          <button
+            onClick={toggleExpand}
+            className="p-2.5 bg-white/5 hover:bg-white/10 text-gray-400 rounded-xl border border-white/5 transition-all"
+          >
+            {expanded ? '▲' : '▼'}
+          </button>
+        </div>
       </div>
 
-      {/* Contenido */}
+      {/* --- CONTENIDO DE TARJETAS --- */}
       {expanded && (
-        <div className="overflow-x-auto -mx-4 px-4">
-          <div className="flex flex-wrap gap-3 w-max min-w-full">
-            {/* Slot de creación como primera tarjeta */}
-            <div className="w-36 flex-shrink-0">
+        <div className="relative">
+          {/* Sombra para indicar scroll horizontal */}
+          <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-[#020617] to-transparent z-10 pointer-events-none rounded-r-[2.5rem]" />
+          
+          <div className="flex gap-5 overflow-x-auto pb-4 pr-12 custom-scrollbar scroll-smooth">
+            {/* Slot para crear nueva tarjeta */}
+            <div className="w-[180px] min-w-[180px] h-[280px] relative flex-shrink-0">
               {showCreateForm ? (
-                <CardForm
-                  onSave={handleSaveCreate}
-                  onCancel={() => setShowCreateForm(false)}
-                />
+                <div className="absolute inset-0 bg-[#0f172a] rounded-[2rem] border border-cyan-500/30 overflow-hidden shadow-2xl">
+                   <CardForm
+                    onSave={handleSaveCreate}
+                    onCancel={() => setShowCreateForm(false)}
+                  />
+                </div>
               ) : (
                 <button
                   onClick={() => setShowCreateForm(true)}
-                  className="w-full h-full border-2 border-dashed border-blue-400 text-blue-500 text-sm rounded-lg flex flex-col items-center justify-center p-3 hover:bg-blue-50 transition"
+                  className="w-full h-full border-2 border-dashed border-white/10 rounded-[2rem] flex flex-col items-center justify-center gap-3 text-gray-500 hover:border-cyan-500/40 hover:text-cyan-400 transition-all bg-white/5 group"
                 >
-                  <span className="text-2xl font-bold">+</span>
-                  <span className="text-xs mt-1">Nueva Tarjeta</span>
+                  <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+                    +
+                  </div>
+                  <span className="text-[10px] font-black uppercase tracking-widest">Nuevo Item</span>
                 </button>
               )}
             </div>
 
-            {/* Tarjetas existentes (ordenadas A→Z). Cada una puede volverse CardForm si está en edición */}
+            {/* Render de las tarjetas existentes */}
             {sortedCards.map((card) => {
               const cid = card._id || card.id;
               const isEditing = editingCardId === cid;
 
               return (
-                <div key={cid} className="w-36 flex-shrink-0">
+                <div key={cid} className="w-[180px] min-w-[180px] h-[320px] relative flex-shrink-0">
                   {isEditing ? (
-                    <CardForm
-                      initialValues={card}
-                      isEditing
-                      onSave={(data) => saveEdit(cid, data)}
-                      onCancel={cancelEdit}
-                    />
+                    <div className="absolute inset-0 bg-[#0f172a] rounded-[2rem] border border-cyan-500/30 overflow-hidden shadow-2xl">
+                      <CardForm
+                        initialValues={card}
+                        isEditing
+                        onSave={(data) => saveEdit(cid, data)}
+                        onCancel={cancelEdit}
+                      />
+                    </div>
                   ) : (
                     <Card
                       card={card}
-                      diffusionId={id}
                       onEdit={() => startEdit(card)}
                       onDelete={() => handleDeleteCard(cid)}
                       onToggleSend={handleToggleCardSend}
@@ -300,7 +272,9 @@ function DiffusionBox({ container, setContainers }) {
           </div>
 
           {savingEdit && (
-            <div className="text-xs text-gray-500 mt-2">Guardando cambios…</div>
+            <div className="absolute bottom-[-20px] left-0 text-[9px] font-bold text-cyan-500 animate-pulse uppercase tracking-widest">
+              Sincronizando cambios con Cerebro Central...
+            </div>
           )}
         </div>
       )}

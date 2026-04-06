@@ -58,13 +58,23 @@ function Card({ card, diffusionId, onEdit, onDelete, onToggleSend }) {
       <div className="p-3 flex flex-col flex-1 min-h-0 justify-between bg-[#111827]">
         
         {/* Mensaje con más espacio */}
-        <div className="flex flex-col gap-1 overflow-hidden">
-          {message && (
-            <p className="text-[10px] text-gray-400 line-clamp-3 leading-tight italic opacity-70 border-l border-cyan-500/30 pl-2">
-              "{message}"
-            </p>
-          )}
-        </div>
+        <div className="relative flex flex-col gap-1 mt-auto"> {/* mt-auto lo empuja hacia arriba si hay espacio, o lo mantiene al fondo */}
+  {message && (
+    <div className="relative group">
+      {/* Tooltip opcional o simplemente el texto con libertad de movimiento */}
+      <p className="text-[10px] text-gray-400 line-clamp-4 leading-tight italic opacity-80 border-l-2 border-cyan-500/40 pl-2 transition-all duration-300 hover:opacity-100 hover:text-gray-200">
+        "{message}"
+      </p>  
+      
+      {/* Si el mensaje es MUY largo y quieres que al pasar el mouse se vea TODO 
+        sin romper la tarjeta, puedes usar este truquito:
+      */}
+      {/* <div className="absolute bottom-full left-0 mb-2 w-full bg-[#0f172a] p-2 rounded-lg border border-cyan-500/20 text-[9px] opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 shadow-2xl">
+        {message}
+      </div> */}
+    </div>
+  )}
+</div>
 
         {/* 🛠️ Footer de Acciones (Bien distribuido) */}
         <div className="flex flex-col gap-2 pt-2">
